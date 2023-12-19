@@ -204,10 +204,10 @@ fn test_to_uint() {
 
 #[test]
 fn test_to_uint_slice() {
-    let s = String::new("20231219");
+    let s = String::new("2023/12/19");
     assert(s.to_uint_slice(0, 4) == 2023);
-    assert(s.to_uint_slice(4, 6) == 12);
-    assert(s.to_uint_slice(6, 8) == 19);
+    assert(s.to_uint_slice(5, 7) == 12);
+    assert(s.to_uint_slice(8, 10) == 19);
 }
 
 #[test]
