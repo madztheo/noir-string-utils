@@ -45,7 +45,7 @@ assert(my_int == 123);
 ```rust
 let my_str = "2023/12/19";
 let my_string = String::new(my_str);
-let my_int = my_string.slice_to_uint(5, 7);
+let my_int = my_string.to_uint_slice(5, 7);
 assert(my_int == 12);
 ```
 
