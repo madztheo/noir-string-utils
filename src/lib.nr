@@ -7,11 +7,10 @@ global LOWERCASE_Z_INDEX: u8 = 122;
 global ZERO_INDEX: u8 = 48;
 global NINE_INDEX: u8 = 57;
 global ASCII_TABLE_START_INDEX: u8 = 33;
-// The empty space in between the two square brackets is supposed to be a backslash.
 global SORTED_ASCII_TABLE: [str<1>; 94] = ["!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",",
     "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">",
     "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
-    "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", " ", "]", "^", "_", "`", "a",
+    "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a",
     "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
     "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"
 ];
