@@ -45,6 +45,36 @@ impl<N> String<N> {
         index
     }
 
+    fn last_index_of(self: Self, c: str<1>) -> i127 {
+        let byte = c.as_bytes()[0];
+        let str_bytes = self.value.as_bytes();
+        let ascii_index = byte - ASCII_TABLE_START_INDEX;
+        let mut index = -1 as i127;
+        for i in 0..self.len {
+            if str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0] {
+                index = i as i127;
+            }
+        }
+        index
+    }
+
+    fn indexes_of(self: Self, c: str<1>) -> Vec<u64> {
+        let byte = c.as_bytes()[0];
+        let str_bytes = self.value.as_bytes();
+        let ascii_index = byte - ASCII_TABLE_START_INDEX;
+        let mut indexes: Vec<u64> = Vec::new();
+        for i in 0..self.len {
+            if str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0] {
+                indexes.push(i);
+            }
+        }
+        indexes
+    }
+
+    fn contains(self: Self, c: str<1>) -> bool {
+        self.index_of(c) != -1
+    }
+
     fn occurrences_of(self: Self, c: str<1>) -> u64 {
         let byte = c.as_bytes()[0];
         let str_bytes = self.value.as_bytes();
@@ -64,11 +94,23 @@ impl<N> String<N> {
         byte - ZERO_INDEX
     }
 
-    fn to_uint(self: Self) -> u64 {
+    fn to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
         let mut result = 0;
-        for i in 0..self.len {
+        for i in start..end {
             let digit = self.digit_at(i);
             result = result * 10 + digit as u64;
+        }
+        result
+    }
+
+    fn to_uint(self: Self) -> u64 {
+        self.to_uint_slice(0, self.len)
+    }
+
+    fn to_array_of_chars(self: Self) -> [str<1>; N] {
+        let mut result: [str<1>; N] = [" "; N];
+        for i in 0..self.len {
+            result[i] = self.char_at(i);
         }
         result
     }
@@ -102,6 +144,37 @@ fn test_index_of() {
 }
 
 #[test]
+fn test_last_index_of() {
+    let s = String::new("hello");
+    assert(s.last_index_of("h") == 0);
+    assert(s.last_index_of("e") == 1);
+    assert(s.last_index_of("l") == 3);
+    assert(s.last_index_of("o") == 4);
+    assert(s.last_index_of("a") == -1);
+}
+
+#[test]
+fn test_indexes_of() {
+    let s = String::new("hello");
+    assert(s.indexes_of("h").get(0) == 0);
+    assert(s.indexes_of("e").get(0) == 1);
+    assert(s.indexes_of("l").get(0) == 2);
+    assert(s.indexes_of("l").get(1) == 3);
+    assert(s.indexes_of("o").get(0) == 4);
+    assert(s.indexes_of("a").len() == 0);
+}
+
+#[test]
+fn test_contains() {
+    let s = String::new("hello");
+    assert(s.contains("h"));
+    assert(s.contains("e"));
+    assert(s.contains("l"));
+    assert(s.contains("o"));
+    assert(!s.contains("a"));
+}
+
+#[test]
 fn test_occurrences_of() {
     let s = String::new("hello");
     assert(s.occurrences_of("h") == 1);
@@ -128,4 +201,23 @@ fn test_digit_at() {
 fn test_to_uint() {
     let s = String::new("20231219");
     assert(s.to_uint() == 20231219);
+}
+
+#[test]
+fn test_to_uint_slice() {
+    let s = String::new("20231219");
+    assert(s.to_uint_slice(0, 4) == 2023);
+    assert(s.to_uint_slice(4, 6) == 12);
+    assert(s.to_uint_slice(6, 8) == 19);
+}
+
+#[test]
+fn test_to_array_of_chars() {
+    let s = String::new("hello");
+    let arr = s.to_array_of_chars();
+    assert(arr[0] == "h");
+    assert(arr[1] == "e");
+    assert(arr[2] == "l");
+    assert(arr[3] == "l");
+    assert(arr[4] == "o");
 }
