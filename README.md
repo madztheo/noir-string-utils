@@ -40,6 +40,15 @@ let my_int = my_string.to_uint();
 assert(my_int == 123);
 ```
 
+### Similarly for hex numbers
+
+```rust
+let my_str = "0x123";
+let my_string = String::new(my_str);
+let my_int = my_string.from_hex_to_uint();
+assert(my_int == 291);
+```
+
 ### Convert a specific slice of a string into a number
 
 ```rust
@@ -47,6 +56,15 @@ let my_str = "2023/12/19";
 let my_string = String::new(my_str);
 let my_int = my_string.to_uint_slice(5, 7);
 assert(my_int == 12);
+```
+
+### Similarly for hex numbers
+
+```rust
+let my_str = "0xa1b2c3d4e5f6";
+let my_string = String::new(my_str);
+let my_int = my_string.from_hex_to_uint_slice(2, 4);
+assert(my_int == 161);
 ```
 
 ### Get the character at a specific index

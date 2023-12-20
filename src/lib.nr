@@ -94,6 +94,20 @@ impl<N> String<N> {
         byte - ZERO_INDEX
     }
 
+    fn hex_digit_at(self: Self, index: u64) -> u8 {
+        let byte = self.value.as_bytes()[index];
+        if (byte >= ZERO_INDEX) & (byte <= NINE_INDEX) {
+            byte - ZERO_INDEX
+        } else if (byte >= UPPERCASE_A_INDEX) & (byte <= UPPERCASE_Z_INDEX) {
+            byte - UPPERCASE_A_INDEX + 10
+        } else if (byte >= LOWERCASE_A_INDEX) & (byte <= LOWERCASE_Z_INDEX) {
+            byte - LOWERCASE_A_INDEX + 10
+        } else{
+            assert(false);
+            0
+        }
+    }
+
     fn to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
         let mut result = 0;
         for i in start..end {
@@ -113,6 +127,23 @@ impl<N> String<N> {
             -1 * self.to_uint_slice(1, self.len) as i126
         } else {
             self.to_uint_slice(0, self.len) as i126
+        }
+    }
+
+    fn from_hex_to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
+        let mut result = 0;
+        for i in start..end {
+            let digit = self.hex_digit_at(i);
+            result = result * 16 + digit as u64;
+        }
+        result
+    }
+
+    fn from_hex_to_uint(self: Self, with_prefix: bool) -> u64 {
+        if with_prefix {
+            self.from_hex_to_uint_slice(2, self.len)
+        } else {
+            self.from_hex_to_uint_slice(0, self.len)
         }
     }
 
@@ -217,6 +248,21 @@ fn test_digit_at() {
 }
 
 #[test]
+fn test_hex_digit_at() {
+    let s = String::new("0x1324ABCDEF");
+    assert(s.hex_digit_at(2) == 1);
+    assert(s.hex_digit_at(3) == 3);
+    assert(s.hex_digit_at(4) == 2);
+    assert(s.hex_digit_at(5) == 4);
+    assert(s.hex_digit_at(6) == 10);
+    assert(s.hex_digit_at(7) == 11);
+    assert(s.hex_digit_at(8) == 12);
+    assert(s.hex_digit_at(9) == 13);
+    assert(s.hex_digit_at(10) == 14);
+    assert(s.hex_digit_at(11) == 15);
+}
+
+#[test]
 fn test_to_uint() {
     let s = String::new("20231219");
     assert(s.to_uint() == 20231219);
@@ -237,6 +283,29 @@ fn test_to_uint_slice() {
     assert(s.to_uint_slice(0, 4) == 2023);
     assert(s.to_uint_slice(5, 7) == 12);
     assert(s.to_uint_slice(8, 10) == 19);
+}
+
+#[test]
+fn test_from_hex_to_uint_slice() {
+    let s = String::new("0x1324ABCDEF");
+    assert(s.from_hex_to_uint_slice(2, 6) == 0x1324);
+    assert(s.from_hex_to_uint_slice(6, 9) == 0xABC);
+    assert(s.from_hex_to_uint_slice(9, 12) == 0xDEF);
+}
+
+#[test]
+fn test_from_hex_to_uint() {
+    let uppercase_hex = String::new("0x1324ABCDEF");
+    assert(uppercase_hex.from_hex_to_uint(true) == 0x1324ABCDEF);
+
+    let lowercase_hex = String::new("0x1234abcdef");
+    assert(lowercase_hex.from_hex_to_uint(true) == 0x1234ABCDEF);
+
+    let hex_without_prefix = String::new("1234abcdef");
+    assert(hex_without_prefix.from_hex_to_uint(false) == 0x1234ABCDEF);
+
+    let hex_with_leading_zeros = String::new("0x000001");
+    assert(hex_with_leading_zeros.from_hex_to_uint(true) == 1);
 }
 
 #[test]
