@@ -39,10 +39,9 @@ impl<N> String<N> {
     fn index_of(self: Self, c: str<1>) -> i127 {
         let byte = c.as_bytes()[0];
         let str_bytes = self.value.as_bytes();
-        let ascii_index = byte - ASCII_TABLE_START_INDEX;
         let mut index = -1 as i127;
         for i in 0..self.len {
-            if (index == -1) & (str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0]) {
+            if (index == -1) & (str_bytes[i] == byte) {
                 index = i as i127;
             }
         }
@@ -52,10 +51,9 @@ impl<N> String<N> {
     fn last_index_of(self: Self, c: str<1>) -> i127 {
         let byte = c.as_bytes()[0];
         let str_bytes = self.value.as_bytes();
-        let ascii_index = byte - ASCII_TABLE_START_INDEX;
         let mut index = -1 as i127;
         for i in 0..self.len {
-            if str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0] {
+            if str_bytes[i] == byte {
                 index = i as i127;
             }
         }
@@ -65,10 +63,9 @@ impl<N> String<N> {
     fn indexes_of(self: Self, c: str<1>) -> Vec<u64> {
         let byte = c.as_bytes()[0];
         let str_bytes = self.value.as_bytes();
-        let ascii_index = byte - ASCII_TABLE_START_INDEX;
         let mut indexes: Vec<u64> = Vec::new();
         for i in 0..self.len {
-            if str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0] {
+            if str_bytes[i] == byte {
                 indexes.push(i);
             }
         }
@@ -82,10 +79,9 @@ impl<N> String<N> {
     fn occurrences_of(self: Self, c: str<1>) -> u64 {
         let byte = c.as_bytes()[0];
         let str_bytes = self.value.as_bytes();
-        let ascii_index = byte - ASCII_TABLE_START_INDEX;
         let mut count = 0;
         for i in 0..self.len {
-            if str_bytes[i] == SORTED_ASCII_TABLE[ascii_index].as_bytes()[0] {
+            if str_bytes[i] == byte {
                 count += 1;
             }
         }
