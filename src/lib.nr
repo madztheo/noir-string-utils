@@ -24,9 +24,14 @@ impl<N> String<N> {
     fn new(value: str<N>) -> Self {
         Self { value, len: N }
     }
+    
+    fn code_at(self: Self, index: u64) -> u8 {
+        assert(index < self.len);
+        self.value.as_bytes()[index]
+    }
 
     fn char_at(self: Self, index: u64) -> str<1> {
-        let byte = self.value.as_bytes()[index];
+        let byte = self.code_at(index);
         let ascii_index = byte - ASCII_TABLE_START_INDEX;
         SORTED_ASCII_TABLE[ascii_index]
     }
@@ -106,6 +111,15 @@ impl<N> String<N> {
         self.to_uint_slice(0, self.len)
     }
 
+    // Note: this function bugs with i127 for some reason
+    fn to_int(self: Self) -> i126 {
+        if self.char_at(0) == "-" {
+            -1 * self.to_uint_slice(1, self.len) as i126
+        } else {
+            self.to_uint_slice(0, self.len) as i126
+        }
+    }
+
     fn to_array_of_chars(self: Self) -> [str<1>; N] {
         let mut result: [str<1>; N] = [" "; N];
         for i in 0..self.len {
@@ -130,6 +144,16 @@ fn test_char_at() {
     assert(s.char_at(2) == "l");
     assert(s.char_at(3) == "l");
     assert(s.char_at(4) == "o");
+}
+
+#[test]
+fn test_code_at() {
+    let s = String::new("hello");
+    assert(s.code_at(0) == 104);
+    assert(s.code_at(1) == 101);
+    assert(s.code_at(2) == 108);
+    assert(s.code_at(3) == 108);
+    assert(s.code_at(4) == 111);
 }
 
 #[test]
@@ -200,6 +224,15 @@ fn test_digit_at() {
 fn test_to_uint() {
     let s = String::new("20231219");
     assert(s.to_uint() == 20231219);
+}
+
+#[test]
+fn test_to_int() {
+    let s = String::new("-25");
+    assert(s.to_int() == -25);
+
+    let s = String::new("25");
+    assert(s.to_int() == 25);
 }
 
 #[test]
