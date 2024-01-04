@@ -6,55 +6,58 @@ global LOWERCASE_A_INDEX: u8 = 97;
 global LOWERCASE_Z_INDEX: u8 = 122;
 global ZERO_INDEX: u8 = 48;
 global NINE_INDEX: u8 = 57;
-global ASCII_TABLE_START_INDEX: u8 = 33;
-global SORTED_ASCII_TABLE: [str<1>; 94] = ["!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",",
-    "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">",
-    "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
-    "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", "_", "`", "a",
-    "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
-    "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"
+global ASCII_TABLE_START_INDEX: u8 = 0;
+global SORTED_ASCII_TABLE: [str<1>; 127] = [    
+    "\0","\0","\0","\0","\0","\0","\0","\0","\0","\t","\n","\0","\0","\r","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0","\0",
+    " ","!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/",
+    "0","1","2","3","4","5","6","7","8","9",
+    ":",";","<","=",">","?","@",
+    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+    "[","\\","]","^","_","`",
+    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+    "{","|","}","~"
 ];
 
 // Functions 
-fn code_at<N>(s: str<N>, index: u64) -> u8 {
+fn code_at<N>(s: str<N>, index: u127) -> u8 {
     assert(index < N);
     s.as_bytes()[index]
 }
 
-fn char_at<N>(s: str<N>, index: u64) -> str<1> {
+fn char_at<N>(s: str<N>, index: u127) -> str<1> {
     let byte = code_at(s, index);
     let ascii_index = byte - ASCII_TABLE_START_INDEX;
     SORTED_ASCII_TABLE[ascii_index]
 }
 
-fn index_of<N>(s: str<N>, c: str<1>) -> i127 {
+fn index_of<N>(s: str<N>, c: str<1>) -> i126 {
     let byte = c.as_bytes()[0];
     let str_bytes = s.as_bytes();
-    let mut index = -1 as i127;
+    let mut index = -1 as i126;
     for i in 0..N {
         if (index == -1) & (str_bytes[i] == byte) {
-            index = i as i127;
+            index = i as i126;
         }
     }
     index
 }
 
-fn last_index_of<N>(s: str<N>, c: str<1>) -> i127 {
+fn last_index_of<N>(s: str<N>, c: str<1>) -> i126 {
     let byte = c.as_bytes()[0];
     let str_bytes = s.as_bytes();
-    let mut index = -1 as i127;
+    let mut index = -1 as i126;
     for i in 0..N {
         if str_bytes[i] == byte {
-            index = i as i127;
+            index = i as i126;
         }
     }
     index
 }
 
-fn indexes_of<N>(s: str<N>, c: str<1>) -> Vec<u64> {
+fn indexes_of<N>(s: str<N>, c: str<1>) -> Vec<u127> {
     let byte = c.as_bytes()[0];
     let str_bytes = s.as_bytes();
-    let mut indexes: Vec<u64> = Vec::new();
+    let mut indexes: Vec<u127> = Vec::new();
     for i in 0..N {
         if str_bytes[i] == byte {
             indexes.push(i);
@@ -67,7 +70,7 @@ fn contains<N>(s: str<N>, c: str<1>) -> bool {
     index_of(s, c) != -1
 }
 
-fn occurrences_of<N>(s: str<N>, c: str<1>) -> u64 {
+fn occurrences_of<N>(s: str<N>, c: str<1>) -> u127 {
     let byte = c.as_bytes()[0];
     let str_bytes = s.as_bytes();
     let mut count = 0;
@@ -79,13 +82,13 @@ fn occurrences_of<N>(s: str<N>, c: str<1>) -> u64 {
     count
 }
 
-fn digit_at<N>(s: str<N>, index: u64) -> u8 {
+fn digit_at<N>(s: str<N>, index: u127) -> u8 {
     let byte = s.as_bytes()[index];
     assert((byte >= ZERO_INDEX) & (byte <= NINE_INDEX));
     byte - ZERO_INDEX
 }
 
-fn hex_digit_at<N>(s: str<N>, index: u64) -> u8 {
+fn hex_digit_at<N>(s: str<N>, index: u127) -> u8 {
     let byte = s.as_bytes()[index];
     if (byte >= ZERO_INDEX) & (byte <= NINE_INDEX) {
         byte - ZERO_INDEX
@@ -99,20 +102,19 @@ fn hex_digit_at<N>(s: str<N>, index: u64) -> u8 {
     }
 }
 
-fn to_uint_slice<N>(s: str<N>, start: u64, end: u64) -> u64 {
+fn to_uint_slice<N>(s: str<N>, start: u127, end: u127) -> u127 {
     let mut result = 0;
     for i in start..end {
         let digit = digit_at(s, i);
-        result = result * 10 + digit as u64;
+        result = result * 10 + digit as u127;
     }
     result
 }
 
-fn to_uint<N>(s: str<N>) -> u64 {
+fn to_uint<N>(s: str<N>) -> u127 {
     to_uint_slice(s, 0, N)
 }
 
-// Note: this function bugs with i127 for some reason
 fn to_int<N>(s: str<N>) -> i126 {
     if char_at(s, 0) == "-" {
         -1 * to_uint_slice(s, 1, N) as i126
@@ -121,16 +123,16 @@ fn to_int<N>(s: str<N>) -> i126 {
     }
 }
 
-fn from_hex_to_uint_slice<N>(s: str<N>, start: u64, end: u64) -> u64 {
+fn from_hex_to_uint_slice<N>(s: str<N>, start: u127, end: u127) -> u127 {
     let mut result = 0;
     for i in start..end {
         let digit = hex_digit_at(s, i);
-        result = result * 16 + digit as u64;
+        result = result * 16 + digit as u127;
     }
     result
 }
 
-fn from_hex_to_uint<N>(s: str<N>, with_prefix: bool) -> u64 {
+fn from_hex_to_uint<N>(s: str<N>, with_prefix: bool) -> u127 {
     if with_prefix {
         from_hex_to_uint_slice(s, 2, N)
     } else {
@@ -150,7 +152,7 @@ fn to_array_of_chars<N>(s: str<N>) -> [str<1>; N] {
 
 struct String<N> {
     value: str<N>,
-    len: u64,
+    len: u127,
 }
 
 // Implementation over String struct
@@ -160,23 +162,23 @@ impl<N> String<N> {
         Self { value, len: N }
     }
     
-    fn code_at(self: Self, index: u64) -> u8 {
+    fn code_at(self: Self, index: u127) -> u8 {
         code_at(self.value, index)
     }
 
-    fn char_at(self: Self, index: u64) -> str<1> {
+    fn char_at(self: Self, index: u127) -> str<1> {
         char_at(self.value, index)
     }
 
-    fn index_of(self: Self, c: str<1>) -> i127 {
+    fn index_of(self: Self, c: str<1>) -> i126 {
         index_of(self.value, c)
     }
 
-    fn last_index_of(self: Self, c: str<1>) -> i127 {
+    fn last_index_of(self: Self, c: str<1>) -> i126 {
         last_index_of(self.value, c)
     }
 
-    fn indexes_of(self: Self, c: str<1>) -> Vec<u64> {
+    fn indexes_of(self: Self, c: str<1>) -> Vec<u127> {
         indexes_of(self.value, c)
     }
 
@@ -184,23 +186,23 @@ impl<N> String<N> {
         contains(self.value, c)
     }
 
-    fn occurrences_of(self: Self, c: str<1>) -> u64 {
+    fn occurrences_of(self: Self, c: str<1>) -> u127 {
         occurrences_of(self.value, c)
     }
 
-    fn digit_at(self: Self, index: u64) -> u8 {
+    fn digit_at(self: Self, index: u127) -> u8 {
         digit_at(self.value, index)
     }
 
-    fn hex_digit_at(self: Self, index: u64) -> u8 {
+    fn hex_digit_at(self: Self, index: u127) -> u8 {
         hex_digit_at(self.value, index)
     }
 
-    fn to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
+    fn to_uint_slice(self: Self, start: u127, end: u127) -> u127 {
         to_uint_slice(self.value, start, end)
     }
 
-    fn to_uint(self: Self) -> u64 {
+    fn to_uint(self: Self) -> u127 {
         to_uint_slice(self.value, 0, self.len)
     }
 
@@ -208,11 +210,11 @@ impl<N> String<N> {
         to_int(self.value)
     }
 
-    fn from_hex_to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
+    fn from_hex_to_uint_slice(self: Self, start: u127, end: u127) -> u127 {
         from_hex_to_uint_slice(self.value, start, end)
     }
 
-    fn from_hex_to_uint(self: Self, with_prefix: bool) -> u64 {
+    fn from_hex_to_uint(self: Self, with_prefix: bool) -> u127 {
         from_hex_to_uint(self.value, with_prefix)
     }
 
@@ -223,41 +225,41 @@ impl<N> String<N> {
 
 // Trait
 trait StringTrait {
-    fn code_at(self, index: u64) -> u8;
-    fn char_at(self, index: u64) -> str<1>;
-    fn index_of(self, c: str<1>) -> i127;
-    fn last_index_of(self, c: str<1>) -> i127;
-    fn indexes_of(self, c: str<1>) -> Vec<u64>;
+    fn code_at(self, index: u127) -> u8;
+    fn char_at(self, index: u127) -> str<1>;
+    fn index_of(self, c: str<1>) -> i126;
+    fn last_index_of(self, c: str<1>) -> i126;
+    fn indexes_of(self, c: str<1>) -> Vec<u127>;
     fn contains(self, c: str<1>) -> bool;
-    fn occurrences_of(self, c: str<1>) -> u64;
-    fn digit_at(self, index: u64) -> u8;
-    fn hex_digit_at(self, index: u64) -> u8;
-    fn to_uint_slice(self, start: u64, end: u64) -> u64;
-    fn to_uint(self) -> u64;
+    fn occurrences_of(self, c: str<1>) -> u127;
+    fn digit_at(self, index: u127) -> u8;
+    fn hex_digit_at(self, index: u127) -> u8;
+    fn to_uint_slice(self, start: u127, end: u127) -> u127;
+    fn to_uint(self) -> u127;
     fn to_int(self) -> i126;
-    fn from_hex_to_uint_slice(self, start: u64, end: u64) -> u64;
-    fn from_hex_to_uint(self, with_prefix: bool) -> u64;
+    fn from_hex_to_uint_slice(self, start: u127, end: u127) -> u127;
+    fn from_hex_to_uint(self, with_prefix: bool) -> u127;
 }
 
 // Implementation for str type
 impl<N> StringTrait for str<N> {
-    fn code_at(self: Self, index: u64) -> u8 {
+    fn code_at(self: Self, index: u127) -> u8 {
         code_at(self, index)
     }
 
-    fn char_at(self: Self, index: u64) -> str<1> {
+    fn char_at(self: Self, index: u127) -> str<1> {
         char_at(self, index)
     }
 
-    fn index_of(self: Self, c: str<1>) -> i127 {
+    fn index_of(self: Self, c: str<1>) -> i126 {
         index_of(self, c)
     }
 
-    fn last_index_of(self: Self, c: str<1>) -> i127 {
+    fn last_index_of(self: Self, c: str<1>) -> i126 {
         last_index_of(self, c)
     }
 
-    fn indexes_of(self: Self, c: str<1>) -> Vec<u64> {
+    fn indexes_of(self: Self, c: str<1>) -> Vec<u127> {
         indexes_of(self, c)
     }
 
@@ -265,23 +267,23 @@ impl<N> StringTrait for str<N> {
         contains(self, c)
     }
 
-    fn occurrences_of(self: Self, c: str<1>) -> u64 {
+    fn occurrences_of(self: Self, c: str<1>) -> u127 {
         occurrences_of(self, c)
     }
 
-    fn digit_at(self: Self, index: u64) -> u8 {
+    fn digit_at(self: Self, index: u127) -> u8 {
         digit_at(self, index)
     }
 
-    fn hex_digit_at(self: Self, index: u64) -> u8 {
+    fn hex_digit_at(self: Self, index: u127) -> u8 {
         hex_digit_at(self, index)
     }
 
-    fn to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
+    fn to_uint_slice(self: Self, start: u127, end: u127) -> u127 {
         to_uint_slice(self, start, end)
     }
 
-    fn to_uint(self: Self) -> u64 {
+    fn to_uint(self: Self) -> u127 {
         to_uint_slice(self, 0, N)
     }
 
@@ -289,11 +291,11 @@ impl<N> StringTrait for str<N> {
         to_int(self)
     }
 
-    fn from_hex_to_uint_slice(self: Self, start: u64, end: u64) -> u64 {
+    fn from_hex_to_uint_slice(self: Self, start: u127, end: u127) -> u127 {
         from_hex_to_uint_slice(self, start, end)
     }
 
-    fn from_hex_to_uint(self: Self, with_prefix: bool) -> u64 {
+    fn from_hex_to_uint(self: Self, with_prefix: bool) -> u127 {
         from_hex_to_uint(self, with_prefix)
     }
 }
