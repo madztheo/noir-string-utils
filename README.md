@@ -93,6 +93,15 @@ let my_index = my_string.index_of('W');
 assert(my_index == 6);
 ```
 
+### Get the index of a substring
+
+```rust
+let my_str = "Hello World!";
+let my_string = String::new(my_str);
+let my_index = my_string.index_of("World");
+assert(my_index == 6);
+```
+
 ### Get the last index of a character
 
 ```rust
@@ -102,6 +111,15 @@ let my_index = my_string.last_index_of('l');
 assert(my_index == 9);
 ```
 
+### Get the last index of a substring
+
+```rust
+let my_str = "Hello World!";
+let my_string = String::new(my_str);
+let my_index = my_string.last_index_of('rld');
+assert(my_index == 8);
+```
+
 ### Check if a string contains a character
 
 ```rust
@@ -109,6 +127,15 @@ let my_str = "Hello World!";
 let my_string = String::new(my_str);
 assert(my_string.contains('W'));
 assert(!my_string.contains('a'));
+```
+
+### Check if a string is contained in another string
+
+```rust
+let my_str = "Hello World!";
+let my_string = String::new(my_str);
+assert(my_string.contains('Hello'));
+assert(!my_string.contains('everybody'));
 ```
 
 ## Usage for StringTrait
@@ -163,6 +190,14 @@ let my_index = my_str.index_of('W');
 assert(my_index == 6);
 ```
 
+### Get the index of a substring
+
+```rust
+let my_str = "Hello World!";
+let my_index = my_str.index_of("World");
+assert(my_index == 6);
+```
+
 ### Get the last index of a character
 
 ```rust
@@ -171,10 +206,26 @@ let my_index = my_str.last_index_of('l');
 assert(my_index == 9);
 ```
 
+### Get the last index of a substring
+
+```rust
+let my_str = "Hello World!";
+let my_index = my_str.last_index_of('rld');
+assert(my_index == 8);
+```
+
 ### Check if a string contains a character
 
 ```rust
 let my_str = "Hello World!";
 assert(my_str.contains('W'));
 assert(!my_str.contains('a'));
+```
+
+### Check if a string is contained in another string
+
+```rust
+let my_str = "Hello World!";
+assert(my_str.contains('Hello'));
+assert(!my_str.contains('everybody'));
 ```
