@@ -125,16 +125,54 @@ fn last_index_of<N, M>(s: str<N>, substr: str<M>) -> i126 {
     final_index
 }
 
-// TODO: Support substrings
-fn indexes_of<N>(s: str<N>, c: str<1>) -> Vec<u127> {
-    let byte = c.as_bytes()[0];
+// NOT WORKING
+// Runs into a compilation error
+fn indexes_of<N, M>(s: str<N>, substr: str<M>) -> Vec<u127> {
+    assert(M <= N, "Substring length must be less than or equal to string length");
+    let substr_bytes = substr.as_bytes();
     let str_bytes = s.as_bytes();
+    let mut temp_index = -1 as i126;
+    // To keep track of how many characters of the substring
+    // have been found
+    let mut match_count = 0;
     let mut indexes: Vec<u127> = Vec::new();
     for i in 0..N {
-        if str_bytes[i] == byte {
-            indexes.push(i);
+        if (match_count == M) {
+            indexes.push(temp_index as u127);
+            temp_index = -1;
+            match_count = 0;
+        }
+
+        // If the current character matches the first character of the substring
+        // and the index is not set, then set the index to the current index
+        if (temp_index == -1) & (str_bytes[i] == substr_bytes[0]) {
+            temp_index = i as i126;
+            match_count += 1;
+        } else if (temp_index != -1) & (i - temp_index < M) {
+            if (str_bytes[i] != substr_bytes[i - temp_index]) {
+                // If any of the subsequent characters don't match, reset the index
+                // as this means it's not the right substring
+                if (str_bytes[i] == substr_bytes[0]) {
+                    // If the current character matches the first character
+                    // of the substring, then set the index to the current
+                    temp_index = i as i126;
+                    match_count = 1;
+                } else {
+                    // Otherwise, reset the index
+                    temp_index = -1;
+                    match_count = 0;
+                }
+            } else {
+                // Here the characters match, so we increment the match count
+                match_count += 1;
+            }
         }
     }
+
+    if (match_count == M) & (temp_index != -1) {
+        indexes.push(temp_index as u127);
+    }
+
     indexes
 }
 
@@ -290,8 +328,8 @@ impl<N> String<N> {
         last_index_of(self.value, substr)
     }
 
-    fn indexes_of(self: Self, c: str<1>) -> Vec<u127> {
-        indexes_of(self.value, c)
+    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<u127> {
+        indexes_of(self.value, substr)
     }
 
     fn contains<M>(self: Self, substr: str<M>) -> bool {
@@ -341,7 +379,7 @@ trait StringTrait {
     fn char_at(self, index: u127) -> str<1>;
     fn index_of<M>(self, substr: str<M>) -> i126;
     fn last_index_of<M>(self, c: str<M>) -> i126;
-    fn indexes_of(self, c: str<1>) -> Vec<u127>;
+    fn indexes_of<M>(self, c: str<M>) -> Vec<u127>;
     fn contains<M>(self, substr: str<M>) -> bool;
     fn occurrences_of<M>(self, c: str<M>) -> u127;
     fn digit_at(self, index: u127) -> u8;
@@ -371,8 +409,8 @@ impl<N> StringTrait for str<N> {
         last_index_of(self, substr)
     }
 
-    fn indexes_of(self: Self, c: str<1>) -> Vec<u127> {
-        indexes_of(self, c)
+    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<u127> {
+        indexes_of(self, substr)
     }
 
     fn contains<M>(self: Self, substr: str<M>) -> bool {
@@ -502,6 +540,17 @@ fn test_indexes_of() {
     assert(s.indexes_of("l").get(1) == 3);
     assert(s.indexes_of("o").get(0) == 4);
     assert(s.indexes_of("a").len() == 0);
+
+    let sentence = String::new("some sentence with some repitition");
+    assert(sentence.indexes_of("some").get(0) == 0);
+    assert(sentence.indexes_of("some").get(1) == 19);
+    assert(sentence.indexes_of("sentence").get(0) == 5);
+    assert(sentence.indexes_of("with").get(0) == 14);
+    assert(sentence.indexes_of("repitition").get(0) == 24);
+    assert(sentence.indexes_of("some sentence with some repitition").get(0) == 0);
+    assert(sentence.indexes_of("ti").get(0) == 28);
+    assert(sentence.indexes_of("ti").get(1) == 30);
+    assert(sentence.indexes_of("a").len() == 0);
 }
 
 #[test]
@@ -711,6 +760,17 @@ fn test_trait_indexes_of() {
     assert(s.indexes_of("l").get(1) == 3);
     assert(s.indexes_of("o").get(0) == 4);
     assert(s.indexes_of("a").len() == 0);
+
+    let sentence = "some sentence with some repitition";
+    assert(sentence.indexes_of("some").get(0) == 0);
+    assert(sentence.indexes_of("some").get(1) == 19);
+    assert(sentence.indexes_of("sentence").get(0) == 5);
+    assert(sentence.indexes_of("with").get(0) == 14);
+    assert(sentence.indexes_of("repitition").get(0) == 24);
+    assert(sentence.indexes_of("some sentence with some repitition").get(0) == 0);
+    assert(sentence.indexes_of("ti").get(0) == 28);
+    assert(sentence.indexes_of("ti").get(1) == 30);
+    assert(sentence.indexes_of("a").len() == 0);
 }
 
 #[test]
