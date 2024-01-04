@@ -125,9 +125,9 @@ fn last_index_of<N, M>(s: str<N>, substr: str<M>) -> i126 {
     final_index
 }
 
-// NOT WORKING
-// Runs into a compilation error
-fn indexes_of<N, M>(s: str<N>, substr: str<M>) -> Vec<u127> {
+// We use Field instead of integers for the Vector here as integers 
+// don't seem to work well with Vectors at the moment
+fn indexes_of<N, M>(s: str<N>, substr: str<M>) -> Vec<Field> {
     assert(M <= N, "Substring length must be less than or equal to string length");
     let substr_bytes = substr.as_bytes();
     let str_bytes = s.as_bytes();
@@ -135,10 +135,10 @@ fn indexes_of<N, M>(s: str<N>, substr: str<M>) -> Vec<u127> {
     // To keep track of how many characters of the substring
     // have been found
     let mut match_count = 0;
-    let mut indexes: Vec<u127> = Vec::new();
+    let mut indexes: Vec<Field> = Vec::new();
     for i in 0..N {
         if (match_count == M) {
-            indexes.push(temp_index as u127);
+            indexes.push(temp_index as Field);
             temp_index = -1;
             match_count = 0;
         }
@@ -170,7 +170,7 @@ fn indexes_of<N, M>(s: str<N>, substr: str<M>) -> Vec<u127> {
     }
 
     if (match_count == M) & (temp_index != -1) {
-        indexes.push(temp_index as u127);
+        indexes.push(temp_index as Field);
     }
 
     indexes
@@ -328,7 +328,7 @@ impl<N> String<N> {
         last_index_of(self.value, substr)
     }
 
-    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<u127> {
+    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<Field> {
         indexes_of(self.value, substr)
     }
 
@@ -379,7 +379,7 @@ trait StringTrait {
     fn char_at(self, index: u127) -> str<1>;
     fn index_of<M>(self, substr: str<M>) -> i126;
     fn last_index_of<M>(self, c: str<M>) -> i126;
-    fn indexes_of<M>(self, c: str<M>) -> Vec<u127>;
+    fn indexes_of<M>(self, c: str<M>) -> Vec<Field>;
     fn contains<M>(self, substr: str<M>) -> bool;
     fn occurrences_of<M>(self, c: str<M>) -> u127;
     fn digit_at(self, index: u127) -> u8;
@@ -409,7 +409,7 @@ impl<N> StringTrait for str<N> {
         last_index_of(self, substr)
     }
 
-    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<u127> {
+    fn indexes_of<M>(self: Self, substr: str<M>) -> Vec<Field> {
         indexes_of(self, substr)
     }
 
