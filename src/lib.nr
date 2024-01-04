@@ -147,14 +147,12 @@ fn occurrences_of<N, M>(s: str<N>, substr: str<M>) -> u127 {
     let substr_bytes = substr.as_bytes();
     let str_bytes = s.as_bytes();
     let mut temp_index = -1 as i126;
-    let mut final_index = -1 as i126;
     // To keep track of how many characters of the substring
     // have been found
     let mut match_count = 0;
     let mut occurrences = 0;
     for i in 0..N {
         if (match_count == M) {
-            final_index = temp_index;
             temp_index = -1;
             match_count = 0;
             occurrences += 1;
@@ -187,7 +185,6 @@ fn occurrences_of<N, M>(s: str<N>, substr: str<M>) -> u127 {
     }
 
     if (match_count == M) & (temp_index != -1) {
-        final_index = temp_index;
         occurrences += 1;
     }
 
