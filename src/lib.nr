@@ -493,12 +493,12 @@ fn test_index_of() {
     assert(s.index_of("hello") == 0);
     assert(s.index_of("ow") == -1);
 
-    let sentence = String::new("some sentence with some repitition");
+    let sentence = String::new("some sentence with some repetition");
     assert(sentence.index_of("some") == 0);
     assert(sentence.index_of("sentence") == 5);
     assert(sentence.index_of("with") == 14);
-    assert(sentence.index_of("repitition") == 24);
-    assert(sentence.index_of("some sentence with some repitition") == 0);
+    assert(sentence.index_of("repetition") == 24);
+    assert(sentence.index_of("some sentence with some repetition") == 0);
     assert(sentence.index_of("ti") == 28);
 }
 
@@ -519,12 +519,12 @@ fn test_last_index_of() {
     assert(s.last_index_of("hello") == 0);
     assert(s.last_index_of("ow") == -1);
 
-    let sentence = String::new("some sentence with some repitition");
+    let sentence = String::new("some sentence with some repetition");
     assert(sentence.last_index_of("some") == 19);
     assert(sentence.last_index_of("sentence") == 5);
     assert(sentence.last_index_of("with") == 14);
-    assert(sentence.last_index_of("repitition") == 24);
-    assert(sentence.last_index_of("some sentence with some repitition") == 0);
+    assert(sentence.last_index_of("repetition") == 24);
+    assert(sentence.last_index_of("some sentence with some repetition") == 0);
     assert(sentence.last_index_of("ti") == 30);
 }
 
@@ -538,13 +538,13 @@ fn test_indexes_of() {
     assert(s.indexes_of("o").get(0) == 4);
     assert(s.indexes_of("a").len() == 0);
 
-    let sentence = String::new("some sentence with some repitition");
+    let sentence = String::new("some sentence with some repetition");
     assert(sentence.indexes_of("some").get(0) == 0);
     assert(sentence.indexes_of("some").get(1) == 19);
     assert(sentence.indexes_of("sentence").get(0) == 5);
     assert(sentence.indexes_of("with").get(0) == 14);
-    assert(sentence.indexes_of("repitition").get(0) == 24);
-    assert(sentence.indexes_of("some sentence with some repitition").get(0) == 0);
+    assert(sentence.indexes_of("repetition").get(0) == 24);
+    assert(sentence.indexes_of("some sentence with some repetition").get(0) == 0);
     assert(sentence.indexes_of("ti").get(0) == 28);
     assert(sentence.indexes_of("ti").get(1) == 30);
     assert(sentence.indexes_of("a").len() == 0);
@@ -559,11 +559,11 @@ fn test_contains() {
     assert(s.contains("o"));
     assert(!s.contains("a"));
 
-    let sentence = String::new("some sentence with some repitition");
+    let sentence = String::new("some sentence with some repetition");
     assert(sentence.contains("some"));
     assert(sentence.contains("sentence"));
     assert(sentence.contains("with"));
-    assert(sentence.contains("repitition"));
+    assert(sentence.contains("repetition"));
     assert(sentence.contains("ti"));
     assert(!sentence.contains("hello"));
     assert(!sentence.contains("a"));
@@ -578,11 +578,11 @@ fn test_occurrences_of() {
     assert(s.occurrences_of("o") == 1);
     assert(s.occurrences_of("a") == 0);
 
-    let sentence = String::new("some sentence with some repitition");
+    let sentence = String::new("some sentence with some repetition");
     assert(sentence.occurrences_of("some") == 2);
     assert(sentence.occurrences_of("sentence") == 1);
     assert(sentence.occurrences_of("with") == 1);
-    assert(sentence.occurrences_of("repitition") == 1);
+    assert(sentence.occurrences_of("repetition") == 1);
     assert(sentence.occurrences_of("ti") == 2);
     assert(sentence.occurrences_of("hello") == 0);
     assert(sentence.occurrences_of("a") == 0);
@@ -712,12 +712,12 @@ fn test_trait_index_of() {
     assert(s.index_of("hello") == 0);
     assert(s.index_of("ow") == -1);
 
-    let sentence = "some sentence with some repitition";
+    let sentence = "some sentence with some repetition";
     assert(sentence.index_of("some") == 0);
     assert(sentence.index_of("sentence") == 5);
     assert(sentence.index_of("with") == 14);
-    assert(sentence.index_of("repitition") == 24);
-    assert(sentence.index_of("some sentence with some repitition") == 0);
+    assert(sentence.index_of("repetition") == 24);
+    assert(sentence.index_of("some sentence with some repetition") == 0);
     assert(sentence.index_of("ti") == 28);
 }
 
@@ -739,12 +739,12 @@ fn test_trait_last_index_of() {
     assert(s.last_index_of("hello") == 0);
     assert(s.last_index_of("ow") == -1);
 
-    let sentence = "some sentence with some repitition";
+    let sentence = "some sentence with some repetition";
     assert(sentence.last_index_of("some") == 19);
     assert(sentence.last_index_of("sentence") == 5);
     assert(sentence.last_index_of("with") == 14);
-    assert(sentence.last_index_of("repitition") == 24);
-    assert(sentence.last_index_of("some sentence with some repitition") == 0);
+    assert(sentence.last_index_of("repetition") == 24);
+    assert(sentence.last_index_of("some sentence with some repetition") == 0);
     assert(sentence.last_index_of("ti") == 30);
 }
 
@@ -758,13 +758,13 @@ fn test_trait_indexes_of() {
     assert(s.indexes_of("o").get(0) == 4);
     assert(s.indexes_of("a").len() == 0);
 
-    let sentence = "some sentence with some repitition";
+    let sentence = "some sentence with some repetition";
     assert(sentence.indexes_of("some").get(0) == 0);
     assert(sentence.indexes_of("some").get(1) == 19);
     assert(sentence.indexes_of("sentence").get(0) == 5);
     assert(sentence.indexes_of("with").get(0) == 14);
-    assert(sentence.indexes_of("repitition").get(0) == 24);
-    assert(sentence.indexes_of("some sentence with some repitition").get(0) == 0);
+    assert(sentence.indexes_of("repetition").get(0) == 24);
+    assert(sentence.indexes_of("some sentence with some repetition").get(0) == 0);
     assert(sentence.indexes_of("ti").get(0) == 28);
     assert(sentence.indexes_of("ti").get(1) == 30);
     assert(sentence.indexes_of("a").len() == 0);
@@ -779,11 +779,11 @@ fn test_trait_contains() {
     assert(s.contains("o"));
     assert(!s.contains("a"));
 
-    let sentence = "some sentence with some repitition";
+    let sentence = "some sentence with some repetition";
     assert(sentence.contains("some"));
     assert(sentence.contains("sentence"));
     assert(sentence.contains("with"));
-    assert(sentence.contains("repitition"));
+    assert(sentence.contains("repetition"));
     assert(sentence.contains("ti"));
     assert(!sentence.contains("hello"));
     assert(!sentence.contains("a"));
@@ -798,11 +798,11 @@ fn test_trait_occurrences_of() {
     assert(s.occurrences_of("o") == 1);
     assert(s.occurrences_of("a") == 0);
 
-    let sentence = "some sentence with some repitition";
+    let sentence = "some sentence with some repetition";
     assert(sentence.occurrences_of("some") == 2);
     assert(sentence.occurrences_of("sentence") == 1);
     assert(sentence.occurrences_of("with") == 1);
-    assert(sentence.occurrences_of("repitition") == 1);
+    assert(sentence.occurrences_of("repetition") == 1);
     assert(sentence.occurrences_of("ti") == 2);
     assert(sentence.occurrences_of("hello") == 0);
     assert(sentence.occurrences_of("a") == 0);
